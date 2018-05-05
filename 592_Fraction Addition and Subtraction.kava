@@ -1,0 +1,42 @@
+class Solution {
+    public String fractionAddition(String expression) {
+        String res = "0/1";
+        int i = 0;
+        for (int j = 1; j <= expression.length(); ++j) {
+            if (j == expression.length() || expression.charAt(j) == '+' || expression.charAt(j) == '-') {
+                if (expression.charAt(i) == '+') {
+                    res = addF(res, expression.substring(i + 1, j));
+                }
+                else {
+                    res = addF(res, expression.substring(i, j));
+                }
+                i = j;
+            }
+        }
+        return res;
+    }
+    
+    private String addF(String f1, String f2){
+        String[] s1 = f1.split("/");
+        String[] s2 = f2.split("/");
+        int n1 = Integer.parseInt(s1[0]);
+        int d1 = Integer.parseInt(s1[1]);
+        int n2 = Integer.parseInt(s2[0]);
+        int d2 = Integer.parseInt(s2[1]);
+        
+        int n3 = n1 * d2 + n2 * d1;
+        int d3 = d1 * d2;
+        int gcd = getGCD(n3,d3);
+        n3 = n3 / gcd;
+        d3 = d3 / gcd;
+        
+        return "" + n3 + "/" + d3;
+    }
+    
+    private int getGCD(int a, int b){
+        if (a == 0 || b == 0) {
+            return Math.abs(a + b);
+        }
+        return getGCD(b, a % b);
+    }
+}
