@@ -5,7 +5,8 @@ class Solution {
             public int compare(Integer a, Integer b){
                 return b - a;
             }
-        });        
+        });
+        Queue<Integer> queue = new LinkedList<>();
         int res = 0;
         
         for (char c: tasks) {
@@ -16,25 +17,27 @@ class Solution {
             pq.add(entry.getValue());
         }
         
-        while (!pq.isEmpty()) {
-            int i = 0; 
-            List<Integer> tmp = new ArrayList<>();
-            while (i <= n) {
-                if (!pq.isEmpty()) {
-                    int cur = pq.poll();
-                    if (cur > 1) {
-                        tmp.add(cur - 1);
-                    }
+        int qSize = 0;
+        
+        while (!pq.isEmpty() || qSize > 0) {
+            int next = -1;
+            int cur;
+            if (!pq.isEmpty()) {
+                cur = pq.poll();
+                if (cur > 1) {
+                    next = cur - 1;
+                    qSize++;
                 }
-                res++;
-                if (pq.isEmpty() && tmp.isEmpty()) {
-                    break;
+            }
+            queue.add(next);
+            if (queue.size() > n) {
+                cur = queue.poll();
+                if (cur > 0) {
+                    qSize--;
+                    pq.add(cur);
                 }
-                i++;
             }
-            for (int cur: tmp) {
-                pq.add(cur);
-            }
+            res++;
         }
         return res;
     }
