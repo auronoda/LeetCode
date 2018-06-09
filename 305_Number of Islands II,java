@@ -1,0 +1,67 @@
+class Solution {
+    public List<Integer> numIslands2(int m, int n, int[][] positions) {
+        
+        int[][] dir = new int[][]{{1,0}, {-1,0}, {0,1}, {0,-1}};
+        Map<Integer, Integer> map = new HashMap<>();
+        int count = 0;
+        List<Integer> res = new ArrayList<>();
+        for (int[] cur : positions) {
+            int key = cur[0] * n + cur[1];
+            map.put(key, key);
+            count++;
+            for (int[] d: dir) {
+                int r = cur[0] + d[0];
+                int c = cur[1] + d[1];
+                if (r < 0 || r >= m || c < 0 || c >= n || !map.containsKey(r * n + c)) {
+                    continue;                    
+                }
+                if (union(key, r * n + c, map)) {
+                    count--;
+                }
+            }
+            res.add(count);
+        }
+        return res;
+    }
+    
+    private boolean union(int a, int b, Map<Integer, Integer> map) {
+        int sizeA = 1;
+        int rootA = a;
+        while (rootA != map.get(rootA)) {
+            rootA = map.get(rootA);
+            sizeA++;
+        }
+        int tmpA = a;
+        while (tmpA != rootA) {
+            int tmp = map.get(tmpA);
+            map.put(tmpA, rootA);
+            tmpA = tmp;
+        }
+        
+        int sizeB = 1;
+        int rootB = b;
+        while (rootB != map.get(rootB)) {
+            rootB = map.get(rootB);
+            sizeB++;
+        }
+        int tmpB = b;
+        while (tmpB != rootB) {
+            int tmp = map.get(tmpB);
+            map.put(tmpB, rootB);
+            tmpB = tmp;
+        }
+        
+        if (rootA == rootB) {
+            return false;
+        }
+        
+        if (sizeA > sizeB) {
+            map.put(rootB, rootA);
+        }
+        else {
+            map.put(rootA, rootB);
+        }
+        
+        return true;
+    }
+}
