@@ -1,0 +1,22 @@
+class Solution {
+    public int minCut(String s) {
+        int n = s.length();
+        int[] dp = new int[n];
+        for (int i = 0; i < n; ++i) {
+            dp[i] = i;
+        }
+        
+        for (int i = 1; i < n; ++i) {
+            for (int start = i, end = i; start >= 0 && end < n && s.charAt(start) == s.charAt(end); start--, end++) {
+                int tmp = start == 0? 0: dp[start - 1] + 1;
+                dp[end] = Math.min(dp[end], tmp);
+            }
+            for (int start = i - 1, end = i; start >= 0 && end < n && s.charAt(start) == s.charAt(end); start--, end++) {
+                int tmp = start == 0? 0: dp[start - 1] + 1;
+                dp[end] = Math.min(dp[end], tmp);
+            }
+        }
+        
+        return dp[n - 1];
+    }
+}
